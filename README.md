@@ -1,7 +1,5 @@
-# CXX_Template
+# AOC 2024 C++ Solutions
 
-## What is it for?
-This is just for my DSA class. A template so I can start each week with a fresh project and keep things organized.
+My solutions to the Advent of Code 2024 challenges.
 
-## Who is it for?
-People writing trivial C++, like those implementing a linked list, then moving on to something new next week, or next lecture.
+To run a specific day use `make day<day_number>`.
