@@ -9,7 +9,7 @@ TOOLCHAIN_FLAG = -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpk
 
 # E.G
 day%: debug
-	cd Source/day$(subst day,,$@) && "../../${BUILD_DIR}/Day$(subst day,,$@)"
+	cd Source/day$(subst day,,$@) && "../../${BUILD_DIR}/day$(subst day,,$@)"
 
 debug: ${BUILD_DIR}/
 	cd build && \

@@ -13,8 +13,9 @@ if(MSVC)
 endif()
 
 function (AddDay DAY_NUMBER)
-  add_executable(Day${DAY_NUMBER} ${SOURCE} Source/day${DAY_NUMBER}/main.cc)
-  target_link_libraries(Day${DAY_NUMBER} PRIVATE Core)
+  add_executable(day${DAY_NUMBER} ${SOURCE} Source/day${DAY_NUMBER}/main.cc)
+  target_link_libraries(day${DAY_NUMBER} PRIVATE Core)
 endfunction()
 
 AddDay(01)
+AddDay(02)
