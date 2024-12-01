@@ -1,5 +1,4 @@
 BUILD_DIR = build
-BIN = ${BUILD_DIR}/ProjectName
 
 export VCPKG_ROOT
 
@@ -9,11 +8,8 @@ BUILD_PROGRAM_FLAG = -G "Ninja"
 TOOLCHAIN_FLAG = -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
 
 # E.G
-# Main%: debug
-# 	./${BUILD_DIR}/Pointer$(subst Pointer,,$@)
-
-run: debug
-	./${BIN}
+day%: debug
+	cd Source/day$(subst day,,$@) && "../../${BUILD_DIR}/Day$(subst day,,$@)"
 
 debug: ${BUILD_DIR}/
 	cd build && \
