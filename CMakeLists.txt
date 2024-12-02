@@ -19,3 +19,4 @@ endfunction()
 
 AddDay(01)
 AddDay(02)
+AddDay(03)
