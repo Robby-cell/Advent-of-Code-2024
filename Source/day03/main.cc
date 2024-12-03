@@ -5,6 +5,7 @@
 #include <string>
 
 #include <regex>
+#include <string_view>
 
 auto find_all_matches(const std::string& buf) {
   unsigned total = 0;
@@ -38,4 +39,44 @@ auto part1() {
   return do_part1(input);
 }
 
-auto main() -> int { std::cout << "Part 1: " << part1() << '\n'; }
+auto do_part2(std::istream& input) -> unsigned {
+  auto buf = Aoc::read_file(input);
+
+  unsigned total = 0;
+
+  while (!buf.empty()) {
+    auto next_dont = Aoc::find_substr(buf, "don't()");
+    // either we have npos, pass npos to the count so we dont overflow.
+    // or the location the next don't() was count + length of don't()
+    auto search_area = buf.substr(
+        0, (next_dont == std::string_view::npos) ? next_dont : next_dont + 7);
+    total += find_all_matches(search_area);
+    if (next_dont == std::string_view::npos) {
+      break;
+    }
+
+    // this is the same thing... BUT this is offset by search_area.length()
+    auto next_do = Aoc::find_substr(buf.substr(search_area.length()), "do()");
+    if (next_do == std::string_view::npos) {
+      break;
+    }
+    // so we need to add the offset back on again
+    // if we dont do this, it double dips on some mul instructions
+    buf = buf.substr(next_do + 4 + search_area.length());
+  }
+
+  return total;
+}
+
+auto part2() {
+  std::ifstream input("input.txt");
+  // std::istringstream input("xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64]("
+  //                          "mul(11,8)undo()?mul(8,5))");
+  return do_part2(input);
+}
+
+auto main() -> int {
+  std::cout << "Part 1: " << part1() << '\n';
+  std::cout << "Part 2: " << part2() << '\n';
+  return 0;
+}
