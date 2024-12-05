@@ -1,10 +1,12 @@
 #include <fstream>
 #include <iostream>
 #include <istream>
+#include <ranges>
 #include <sstream>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 
 class Solution {
@@ -41,7 +43,36 @@ public:
     return total;
   }
 
-  auto part2() {}
+  auto insert_update(std::vector<int>& update, int n) {}
+
+  auto fix_update(const std::vector<int>& update) const {
+    std::vector<int> result = update;
+
+    for (auto i : std::ranges::iota_view{0UZ, result.size() - 1}) {
+      for (auto j : std::ranges::iota_view{i + 1, result.size()}) {
+        auto range = must_be_before_.equal_range(result[j]);
+        for (auto it = range.first; it != range.second; ++it) {
+          if (it->second == result[i]) {
+            std::swap(result[j], result[i]);
+            break;
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+  auto part2() const {
+    unsigned total{};
+    for (const auto& update : updates_) {
+      if (!update_valid(update)) {
+        auto ordered_update = fix_update(update);
+        total += ordered_update.at(ordered_update.size() / 2);
+      }
+    }
+
+    return total;
+  }
 
   friend auto operator<<(std::ostream& os, const Solution& s) -> std::ostream& {
     os << "Rules:\n";
@@ -96,7 +127,7 @@ private:
 };
 
 auto main() -> int {
-  //   std::istringstream iss{R"(47|53
+  // std::istringstream iss{R"(47|53
   // 97|13
   // 97|61
   // 97|47
@@ -124,8 +155,9 @@ auto main() -> int {
   // 75,97,47,61,53
   // 61,13,29
   // 97,13,75,29,47)"};
-  //   Solution s(iss);
+  // Solution s(iss);
   Solution s;
 
   std::cout << "Part 1: " << s.part1() << '\n';
+  std::cout << "Part 2: " << s.part2() << '\n';
 }
