@@ -1,24 +1,35 @@
 #include "Core.hpp"
 #include <cstdint>
-#include <functional>
 #include <iostream>
 #include <ranges>
-#include <set>
+#include <string_view>
+#include <unordered_set>
 #include <utility>
 #include <vector>
+
+struct Position {
+  std::uint32_t x;
+  std::uint32_t y;
+
+  constexpr auto operator<=>(const Position&) const = default;
+  // constexpr auto operator<(const Position& other) const -> bool {
+  //   return x < other.x || (x == other.x && y < other.y);
+  // }
+};
+
+template <> struct std::hash<Position> {
+  auto operator()(const Position& p) const -> size_t {
+    char buff[sizeof(p) + 1];
+    std::copy(reinterpret_cast<const char*>(&p),
+              reinterpret_cast<const char*>(&p) + sizeof(p), buff);
+    buff[sizeof(p)] = '\0';
+    return std::hash<std::string_view>{}(buff);
+  }
+};
 
 class Solution {
 public:
   enum class Direction { Up, Right, Down, Left };
-  struct Position {
-    std::uint32_t x;
-    std::uint32_t y;
-
-    constexpr auto operator<=>(const Position&) const = default;
-    // constexpr auto operator<(const Position& other) const -> bool {
-    //   return x < other.x || (x == other.x && y < other.y);
-    // }
-  };
 
   Solution() = default;
 
@@ -41,7 +52,7 @@ public:
 
     auto p = find_guard_position();
     auto dir = Dir::Up;
-    std::set<Position> seen{};
+    std::unordered_set<Position> seen{};
 
     seen.insert(p);
 
@@ -126,16 +137,6 @@ private:
   }
 
   std::vector<std::vector<char>> grid_ = Aoc::file_to_2d_array("input.txt");
-};
-
-template <> struct std::hash<Solution::Position> {
-  auto operator()(const Solution::Position& p) const -> size_t {
-    char buff[sizeof(p) + 1];
-    std::copy(reinterpret_cast<const char*>(&p),
-              reinterpret_cast<const char*>(&p) + sizeof(p), buff);
-    buff[sizeof(p)] = '\0';
-    return std::hash<const char*>{}(buff);
-  }
 };
 
 auto main() -> int {
