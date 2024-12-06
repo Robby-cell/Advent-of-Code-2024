@@ -5,6 +5,7 @@
 #include <ranges>
 #include <string>
 #include <string_view>
+#include <vector>
 namespace Aoc {
 auto read_file(std::string_view path) -> std::string;
 auto read_file(std::istream& file) -> std::string;
@@ -20,6 +21,9 @@ constexpr auto find_substr(std::string_view haystack, std::string_view needle)
   }
   return std::string_view::npos;
 }
+
+auto file_to_2d_array(std::string_view filename)
+    -> std::vector<std::vector<char>>;
 } // namespace Aoc
 
 #endif // CSC_CORE_HPP
