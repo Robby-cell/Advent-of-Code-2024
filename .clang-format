@@ -1,5 +1,6 @@
 ---
 BasedOnStyle: LLVM
+IndentWidth: 4
 AllowShortBlocksOnASingleLine: 'false'
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine: 'false'
