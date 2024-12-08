@@ -1,6 +1,7 @@
 #include "Core.hpp"
 #include <cassert>
 #include <cmath>
+#include <cstdint>
 #include <cstdlib>
 #include <iostream>
 #include <limits>
@@ -27,11 +28,13 @@ template <> struct std::hash<Vec2> {
     }
 };
 
+enum class Part : std::uint8_t { Part1, Part2 };
+
 class Solution {
   public:
     Solution() = default;
 
-    auto part1() const {
+    template <Part Part> auto solve() const {
         std::unordered_map<char, std::vector<Vec2>> nodes;
 
         for (const auto i : iota_view{0UZ, grid.size()}) {
@@ -80,10 +83,14 @@ class Solution {
                                 const auto d1 = distance(origin, v1);
                                 const auto d2 = distance(origin, v2);
 
-                                if (float_eq(d1, d2 * 2) ||
-                                    float_eq(d2, d1 * 2)) {
+                                if constexpr (Part == Part::Part1) {
+                                    if (float_eq(d1, d2 * 2) ||
+                                        float_eq(d2, d1 * 2)) {
+                                        set.emplace(i, j);
+                                        break;
+                                    }
+                                } else if constexpr (Part == Part::Part2) {
                                     set.emplace(i, j);
-                                    break;
                                 }
                             }
                         }
@@ -101,5 +108,6 @@ class Solution {
 
 auto main() -> int {
     Solution s;
-    std::cout << "Part 1: " << s.part1() << '\n';
+    std::cout << "Part 1: " << s.solve<Part::Part1>() << '\n';
+    std::cout << "Part 2: " << s.solve<Part::Part2>() << '\n';
 }
